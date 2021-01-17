@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% include 'partials/_navbar.html' %}
+<section class="accounts">
+    <div class="container">
+        <div class="logout">
+            <p>Thank you for visiting us. You are now logged out.</p>
+            <div class="form-group mt-3">
+                <a href="{% url 'login' %}" class="btn btn-primary">
+                    Login again
+                </a>
+            </div>
+            <p class="mt-3 text-muted">or</p>
+            <div class="form-group mt-3">
+                <a href="/" class="primary-color">
+                    <i class="fas fa-arrow-left"></i> Back to HomePage
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

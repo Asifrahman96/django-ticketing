@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% include 'partials/_navbar.html' %}
+<section class="bookings">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Events Dashboard</li>
+            </ol>
+        </nav>
+        <div class="bookingsHeader">
+            <h4>Events Dashboard</h4>
+            <div class="row bookingStats mt-4">
+                <div class="col-md-2">
+                    <div class="bookingStatsCard">
+                        <p>{{ inLive }}</p>
+                        <i class="fas fa-circle-notch live"></i> <small class="text-muted">In Live</small>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="bookingStatsCard">
+                        <p>{{ offline }}</p>
+                        <i class="fas fa-circle-notch offline"></i> <small class="text-muted">Offline</small>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="bookingStatsCard">
+                        <p>{{ offline }}</p>
+                        <i class="fas fa-circle-notch comingSoon"></i> <small class="text-muted">Coming Soon</small>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="bookingStatsCard">
+                        <p>{{ total }}</p>
+                        <i class="fas fa-circle-notch total"></i> <small class="text-muted">Total Events</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bookingsLive">
+            <h4><i class="fas fa-circle-notch live"></i> Live Events </h4>
+            <div class="row mt-4">
+                {% for events in events %}
+                <div class="col-md-4">
+                    <a href="{% url 'bookings:bookings_dashboard' slug=events.slug %}">
+                        <div class="tinyCard mt-3">
+                            <img src="{{ events.cover_image.url }}" class="img-fluid" alt={{events.name}}>
+                            <h5 class="mt-2 text-center">{{events.name}}</h5>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% include 'partials/_footer.html' %}
+{% endblock %}

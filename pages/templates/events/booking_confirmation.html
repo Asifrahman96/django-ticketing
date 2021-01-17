@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% include 'partials/_navbar.html' %}
+<section class="bookingConfirmation">
+    <div class="col-lg-4 col-md-8 col-sm-8 offset-lg-4 ticketBox">
+        <div class="ticketBox__header">
+            <div class="thumbs">
+                <i class="far fa-thumbs-up"></i>
+            </div>
+            <p>Thanks for booking with us !</p>
+            <p>Booking ID : <span class="bookingId">
+                {% for b_seats in b_seats %}
+                    {{ b_seats.booking_id }}
+                {% endfor %}
+            </span></p>
+        </div>
+        <div class="ticketBox__body">
+            <div class="ticketBox__customer">
+                <p class="ticketBox__cname">{{ c_name }}</p>
+                <p class="text-muted">{{ c_phone }}</p>
+            </div>
+            <hr>
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-5">
+                    <p class="ticketBox__title">{{ show.event }}</p>
+                    <p>{{ show.date | date:"d M Y" }} , {{ show.time | time:"H:i"}}</p>
+                </div>
+                <div class="col-md-3">
+                    <img src={{show.event.cover_image.url}} class="img-fluid" alt={{show.event}}>
+                </div>
+            </div>
+            <div class="row mt-4 text-center">
+                <div class="col-md-4">
+                    <p class="text-primary">Tickets</p>
+                    <p>{{ tickets }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p class="text-primary">Seats</p>
+                    <p>
+                        {% for f_seats in f_seats %}
+                            {{ f_seats.rt }}{{ f_seats.sname }},
+                        {% endfor%}
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p class="text-primary">Price</p>
+                    <p>{{ price }} KWD</p>
+                </div>
+            </div>
+            <hr>
+            <p class="ticketBox__location text-muted text-center"><i class="fas fa-map-marker-alt mr-2"></i> {{ show.event.location }}</p>
+            <div class="form-group text-center mt-4">
+                <button class="btn btn-primary btn-sm">Download Ticket</button>
+            </div>
+            <div class="form-group text-center mt-4">
+                <a href="/" class="btn-link">Back To Home</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% include 'partials/_footer.html' %}
+{% endblock %}

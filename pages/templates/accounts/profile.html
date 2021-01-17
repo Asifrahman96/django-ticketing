@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% include 'partials/_navbar.html' %}
+<section class="profile">
+    <div class="container">
+        <div class="col-md-6 contactForm">
+            <h4>{{ user.first_name }} {{ user.last_name }}</h4>
+            <p>{{ user.email }}</p>
+            <p class="text-muted">{{ user.date_joined }}</p>
+        </div>
+        {% if request.user.is_superuser %}
+        <hr>
+        <a class="btn btn-outline-primary btn-sm" href="{% url 'bookings:bookings_events' %}">Dashboard</a>
+        {% endif%}
+    </div>
+</section>
+{% include 'partials/_footer.html' %}
+{% endblock %}

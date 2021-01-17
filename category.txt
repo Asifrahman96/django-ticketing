@@ -1,0 +1,5 @@
+VIP = #be2edd
+Platinum = #4834d4
+Diamound = #eb4d4b
+Gold = #f0932b
+silver = #22a6b3

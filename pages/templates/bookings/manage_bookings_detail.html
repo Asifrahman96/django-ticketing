@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% include 'partials/_navbar.html' %}
+<section class="manageBookingsDetail">
+    <header class="eventsHeader">
+        <div class="container p-5 text-center">
+            <h3>{{ show.event.name }}</h3>
+        </div>
+    </header>
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'bookings:bookings_events' %}">Event Dashboard</a></li>
+                <li class="breadcrumb-item"><a
+                        href="{% url 'bookings:bookings_dashboard' slug=show.event.slug %}">{{ show.event.name }}</a>
+                </li>
+                <li class="breadcrumb-item"><a href="{% url 'bookings:manage_bookings' slug=show.event.slug %}">Manage
+                        Bookings</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ show.date | date:"d M Y" }},
+                    {{ show.time | time:"H:i"}}</li>
+            </ol>
+        </nav>
+        <div class="showDates">
+            {% for dates in dates %}
+            {% if dates.date != show.date %}
+            <a class="badge badge-primary"
+                href="{% url 'bookings:manage_bookings_detail' dates.id %}">{{ dates.date }},
+                {{ dates.time }}</a>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <hr>
+        {% if bookings %}
+        <div class="bookings mt-4">
+            <div class="row">
+                {% for bookings in bookings %}
+                    <div class="bookingsCard mr-1 mb-1">
+                        <div class="bookingsCard__id">
+                            <p>{{ bookings.booking_id }}</p>
+                        </div>
+                        <div class="bookingsCard__details">
+                            <p>{{bookings.c_name}}</p>
+                            <p>{{bookings.c_email}}</p>
+                            <p>{{bookings.c_phone}}</p>
+                            <p>Seats Booked :</p>
+                            <p>{{ bookings.booked_seats_name }}</p>
+                            <small class="text-muted">{{ bookings.booked_date }}</small>
+                        </div>
+                    </div> 
+                {% endfor %}
+            </div>
+            {% else %}
+                <div class="notAvailable">
+                    <p>No Bookings Done Yet.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% include 'partials/_footer.html' %}
+{% endblock %}

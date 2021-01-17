@@ -1,0 +1,119 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% include 'partials/_navbar.html' %}
+<section class="bookingsDashboard">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'bookings:bookings_events' %}">Event Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ event_detail.name }}</li>
+            </ol>
+        </nav>
+        <div class="heading">
+            <h4>{{ event_detail.name }}</h4>
+        </div>
+        <div class="stats_heading mt-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="bookingStatsCard">
+                        <p><small class="text-muted">KWD</small> <span class="primary-color">{{ total_revenue.price__sum }}</span></p>
+                        <small class="text-muted">Net Sales</small>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="bookingStatsCard">
+                        <p>{{ tickets_sold }}</p>
+                        <small class="text-muted">Tickets Sold</small>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="bookingStatsCard">
+                        <p>{{ attendees }}</p>
+                        <small class="text-muted">Total Attendees</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-4">
+            <div class="col-md-2">
+                <a href="{% url 'bookings:manage_bookings' slug=event_detail.slug %}">
+                    <div class="optionCard">
+                        <div class="optionCard__icon">
+                            <i class="far fa-bookmark"></i>
+                        </div>
+                        <div class="optionCard__details">
+                            <h6>Manage Bookings</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-2">
+                <a href="{% url 'bookings:statistics' slug=event_detail.slug %}">
+                    <div class="optionCard">
+                        <div class="optionCard__icon">
+                            <i class="fas fa-signal"></i>
+                        </div>
+                        <div class="optionCard__details">
+                            <h6>Event Statistics</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-2">
+                <a href="{% url 'bookings:attendees' slug=event_detail.slug %}">
+                    <div class="optionCard">
+                        <div class="optionCard__icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <div class="optionCard__details">
+                            <h6>Event Attendees</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-2">
+                <a href="#">
+                    <div class="optionCard">
+                        <div class="optionCard__icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="optionCard__details">
+                            <h6>Event Reports</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-2">
+                <a href="#">
+                    <div class="optionCard">
+                        <div class="optionCard__icon">
+                            <i class="fas fa-money-check-alt"></i>
+                        </div>
+                        <div class="optionCard__details">
+                            <h6>Payment Details</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-2">
+                <a href="#">
+                    <div class="optionCard">
+                        <div class="optionCard__icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <div class="optionCard__details">
+                            <h6>Offline Tickets</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% include 'partials/_footer.html' %}
+{% endblock %}

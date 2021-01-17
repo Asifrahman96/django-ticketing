@@ -1,0 +1,82 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% include 'partials/_navbar.html' %}
+{% include 'partials/_datatables.html' %}
+<section class="attendees">
+    <header class="eventsHeader">
+        <div class="container">
+            <h4>{{ event_detail.name }} - Event Attendees</h4>
+        </div>
+    </header>
+    <div class="container mt-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'bookings:bookings_events' %}">Event Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'bookings:bookings_dashboard' slug=event_detail.slug %}">{{ event_detail.name }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Event Attendees</li>
+            </ol>
+        </nav>
+        <div class="attendeesFilter col-md-6">
+            <div class="form-group">
+                <label>Attendees for :</label>
+                <div class="dropdown show">
+                    <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Please select a show
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        {% for shows in shows %}
+                            <a class="dropdown-item" href="{% url 'bookings:attendees_detail' shows.id %}">{{ shows.date }}, {{ shows.time }}</a>
+                        {% endfor %} 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        {% if attendees %}
+        <div class="heading text-center">
+            <h5>{{ event_detail.name }} - Attendees for all shows</h5>
+        </div>
+        <div class="attendeesTable mt-5">
+            <table id="attendeesTable" class="table table-primary text-center mt-5">
+                <thead>
+                    <tr>
+                        <th scope="col">Booking Id</th>
+                        <th scope="col">Customer Name</th>
+                        <th scope="col">show Date & time</th>
+                        <th scope="col">Booked Date</th>
+                        <th scope="col">Booked Seats</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col">Amount Paid</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for attendees in attendees %}
+                        <tr>
+                            <td>{{ attendees.booking_id }}</td>
+                            <td>{{ attendees.c_name }}</td>
+                            <td>{{ attendees.show.date }}, {{ attendees.show.time }}</td>
+                            <td>{{ attendees.booked_date | date}}</td>
+                            <td>{{ attendees.booked_seats_name }}</td>
+                            <td>{{ attendees.c_phone }}</td>
+                            <td>
+                                {{ attendees.booked_price }}
+                                <small class="text-muted">KWD</small>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <div class="notAvailable">
+                <p>Please select a show to see attendees</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% include 'partials/_footer.html' %}
+{% endblock %}

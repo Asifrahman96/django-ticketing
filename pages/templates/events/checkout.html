@@ -1,0 +1,116 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% include 'partials/_navbar.html' %}
+<section class="checkout">
+    <header class="header">
+        <div class="container">
+            <div class="heading">
+                <h4>Checkout Page</h4>
+            </div>
+        </div>
+    </header>
+    <div class="container checkoutMain">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="contactDetails">
+                    <div class="contactForm">
+                        <h6>Your Contact Details</h6>
+                        <small class="text-muted">We will only ever contact you about your booking</small>
+                        <hr>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Your Name</label>
+                                <input type="text" class="form-control" name="name"
+                                    placeholder="Please enter you full name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email</label>
+                                <input type="email" class="form-control" name="email"
+                                    placeholder="Please enter your valid email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Phone Number</label>
+                                <input type="text" class="form-control" name="phoneNumber"
+                                    placeholder="Please enter your phone number" required>
+                            </div>
+                            <div class="form-group form-check">
+                                <input type="checkbox" class="form-check-input" id="terms" required>
+                                <label class="form-check-label" for="exampleCheck1">I agree to terms &
+                                    conditions</label>
+                                <small id="emailHelp" class="form-text text-muted">Please confirm you agree to terms and
+                                    conditions of sales and aware that most theatres do not accept exchanges or
+                                    refunds.</small>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Confirm purchase</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="orderDetails">
+                    <div class="timer text-center">
+                        <h6><i class="fas fa-info-circle text-primary" data-toggle="tooltip" data-placement="top"
+                                title="Due to high demand, your chosen tickets can only be held for a limited time and then removed automatically."></i>
+                            <span id="countdown">10:00</span></h6>
+                        <p class="text-muted">Remaining to complete order</p>
+                        <hr>
+                        <a class="btn btn-danger btn-sm" onclick="cancelTicket()"><i class="fas fa-times-circle"></i>
+                            Cancel Ticket</a>
+                    </div>
+                    <div class="orderCheckout">
+                        <h6>Order Summary</h6>
+                        <small class="text-muted">Please check the details of your order before proceeding</small>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <img src={{show.event.cover_image.url}} class="img-fluid" alt={{ show.event }}>
+                            </div>
+                            <div class="col-md-8">
+                                <h6>{{ show.event }}</h6>
+                                <p>{{ show.date | date:"d M Y" }}, {{ show.time | time:"H:i" }}</p>
+                                <p>{{ show.event.location }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <table class="table borderless">
+                            <thead>
+                                <tr>
+                                    <th>Seat Name</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for f_seats in f_seats %}
+                                <tr>
+                                    <td>{{ f_seats.rt }}{{ f_seats.sname }}</td>
+                                    <td>{{ f_seats.price }} KWD</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <th>Order Total</th>
+                                <th>{{ price }} KWD</th>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="{% static 'js/timer.js' %}"></script>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+    function cancelTicket() {
+        if (confirm('Are you sure you want to cancel this ticket ?')) {
+            window.location.href = "/emptybasket";
+        }
+    }
+</script>
+{% include 'partials/_footer.html' %}
+{% endblock %}

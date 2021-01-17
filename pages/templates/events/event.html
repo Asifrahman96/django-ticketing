@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% include 'partials/_navbar.html' %}
+<section class="event">
+    <header class="eventsHeader">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <img src="{{event_detail.cover_image.url}}" class="img-fluid" alt={{event_detail.name}} />
+                </div>
+                <div class="col-md-7">
+                    <h3>{{ event_detail.name }}</h3>
+                    <p>{{ event_detail.event_snippet }}</p>
+                    <p>{{ event_detail.location }}</p>  
+                    <p>Tickets starting from {{ event_detail.starting_price }} KWD</p>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="shows">
+        <div class="container">   
+            <ul class="list-group mt-5">
+                <li class="list-group-item active">Available Shows</li>
+                {% for shows in shows %}
+                    <li class="list-group-item">
+                       <div class="row p-1 justify-content-between">
+                           <div class="date">
+                               {{ shows.date | date:"d M Y" }} , {{shows.time }}
+                           </div>
+                           <div class="venue">
+                                {{ event_detail.location }}
+                           </div>
+                           <div class="showLink">
+                                <a href="{% url 'events:show' shows.id %}" class="btn btn-primary btn-sm
+                                {% if shows.is_full %}
+                                    disabled
+                                {% endif %}">
+                                {% if shows.is_full %}Sold out{% else %}See Tickets{% endif %}</a>
+                            </div>
+                       </div> 
+                    </li>
+                {% endfor %}
+              </ul>
+        </div>
+    </div>
+</section>
+{% include 'partials/_footer.html' %}
+{% endblock %}

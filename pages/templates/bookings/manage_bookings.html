@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% include 'partials/_navbar.html' %}
+<section class="manageBookings">
+    <header class="eventsHeader">
+        <div class="container p-5 text-center">
+            <h3>{{ event_detail.name }}</h3>
+        </div>
+    </header>
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'bookings:bookings_events' %}">Event Dashboard</a></li>
+                <li class="breadcrumb-item"><a  href="{% url 'bookings:bookings_dashboard' slug=event_detail.slug %}">{{ event_detail.name }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Manage Bookings</li>
+            </ol>
+        </nav>
+        <h5><i class="fas fa-circle-notch live"></i> Live Shows</h5>
+        <div class="bookingShows">
+            <div class="row mt-4 mb-5">
+                {% for shows in shows %}
+                    <div class="col-md-3">
+                        <div class="bookingShowsCard">
+                            <h6>{{ shows.name }}</h6>
+                            <p><i class="far fa-calendar-alt mr-1 text-muted"></i> {{ shows.date | date:"d M"  }}
+                            <i class="far fa-clock ml-1 mr-1 text-muted"></i> {{ shows.time | time:"H:i" }}</p>
+                            <p><i class="fas fa-map-marker-alt mr-1"></i> {{ shows.event.location }}</p>
+                            <div class="form-group mt-2">
+                                <a href="{% url 'bookings:manage_bookings_detail' shows.id %}" class="btn btn-primary btn-sm btn-block">See Bookings</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <h5><i class="fas fa-circle-notch offline"></i> Offline Shows</h5>
+            <div class="notAvailable">
+                <p>No Offline Shows Available Right Now.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% include 'partials/_footer.html' %}
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% include 'partials/_navbar.html' %}
+<section class="events">
+    <div class="container">
+        <h3>Events</h3>
+        <div class="row">
+            {% for events in events %}
+            <div class="col-md-6">
+                <a href="{% url 'events:event' slug=events.slug %}">
+                    <div class="jumboCard">
+                        <img src="{{ events.cover_image.url }}" class="img-fluid" alt={{events.name}} />
+                        <div class="jumboCard__details">
+                            <h4>{{ events.name }}</h4>
+                            <p>{{ events.snippet }}</p>
+                            <a href="{% url 'events:event' slug=events.slug %}" class="btn btn-primary">Get Tickets</a>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% include 'partials/_footer.html' %}
+{% endblock %}

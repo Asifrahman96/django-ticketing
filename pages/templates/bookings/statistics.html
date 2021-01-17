@@ -1,0 +1,145 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% include 'partials/_navbar.html' %}
+{% include 'partials/_datatables.html' %}
+<script src="https://code.highcharts.com/highcharts.src.js"></script>
+<section class="bookings_stats">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'bookings:bookings_events' %}">Event Dashboard</a></li>
+                <li class="breadcrumb-item"><a
+                        href="{% url 'bookings:bookings_dashboard' slug=event_detail.slug %}">{{ event_detail.name }}</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Event Statistics</li>
+            </ol>
+        </nav>
+        <div class="statisticsFilter col-md-6">
+            <div class="form-group">
+                <label>Stats For :</label>
+                <div class="dropdown show">
+                    <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Please select a show
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        {% for shows in shows %}
+                        <a class="dropdown-item"
+                            href="{% url 'bookings:statistics_detail' shows.id %}">{{ shows.date }},
+                            {{ shows.time }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="heading">
+            <h5>{{ event_detail.name }} - Ticket Sales for all shows</h5>
+        </div>  
+        <div class="ticketSales__progress mt-2">
+            <small><span class="text-primary">{{tickets_sold}}</span> Tickets sold out of <span class="text-primary">{{ seats_avail }}</span></small>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                    aria-valuenow="{{ tickets_sold }}" aria-valuemin="0" aria-valuemax="100"
+                    style="width:{{tickets_sold | mul:5}}%"></div>
+            </div>
+        </div>
+        <div class="tickets_sold_chart mt-5">
+            <div class="border" id="tickets_sold" style="min-width: 310px; height: 450px; margin: 0 auto"></div>
+            <script>
+                _categories = [{% for date in daily_count %} "{{ date.booked_date__date|date:"SHORT_DATE_FORMAT" }}", {% endfor %}]
+                _values = [{% for date in daily_count %}{{ date.sum }},{% endfor %}]
+
+                Highcharts.chart('tickets_sold', {
+                    chart: {
+                        type: 'line'
+                    },
+                    title: {
+                        text: 'Daily Ticket Sales'
+                    },
+                    xAxis: {
+                        categories: _categories,
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Tickets Sold'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="padding:0"><b>Tickets Sold: {point.y}</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'Tickets',
+                        data: _values
+                    }]
+                });
+            </script>
+        </div>
+        <hr>
+        <div class="category_chart mt-5">
+            <div class="category border" id="category_chart" style="min-width: 310px; height: 450px; margin: 0 auto">
+            </div>
+            <script>
+                Highcharts.chart('category_chart', {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Tickets Sales By Category'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.y}</b>'
+                    },
+                    accessibility: {
+                        point: {
+                            valueSuffix: '%'
+                        }
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: true
+                        }
+                    },
+                    series: [{
+                        name: 'Tickets',
+                        colorByPoint: true,
+                        data: [
+                            {% for category in category_count %}
+                        {
+                        name: '{{ category.category__category }}',
+                        y: {{ category.count }}
+                                    },
+                    {% endfor %} 
+                    ]
+                    }]
+                });
+            </script>
+        </div>
+    </div>
+</section>
+{% include 'partials/_footer.html' %}
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% include 'partials/_navbar.html' %}
+{% include 'partials/_alerts.html' %}
+<header class="header">
+    <div class="container">
+        <div class="searchContainer">
+            <div class="searchBar">
+                <div class="input-group">
+                    <div class="custom-file">
+                        <input class="form-control" placeholder="search for artists, events & venues">
+                    </div>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button">Search</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row shortcuts justify-content-center">
+                <button class="btn btn-outline-light">Trending Now</button>
+                <button class="btn btn-outline-light ml-2">New Arrivals</button>
+                <button class="btn btn-outline-light ml-2">Coming Soon</button>
+            </div>
+        </div>
+    </div>
+</header>
+<section class="featured">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                {% for featured in featured %}
+                <a href="{% url 'events:event' slug=featured.slug %}">
+                    <div class="jumboCard">
+                        <img src="{{ featured.cover_image.url }}" class="img-fluid" alt={{featured.name}}>
+                        <div class="jumboCard__details">
+                            <h4 class="jumboCard__title">{{ featured.name }}</h4>
+                            <p class="jumboCard__desc">
+                                {{ featured.snippet }}
+                            </p>
+                            <button class="btn btn-primary">Get Tickets</button>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            <div class="col-md-4">
+                
+            </div>
+        </div>
+    </div>
+</section>
+<section class="popular">
+    <div class="container">
+        <h3 class="heading">All Events</h3>
+        <div class="row">
+            {% for events in events %}
+            <div class="col-md-4">
+                <a href="{% url 'events:event' slug=events.slug %}">
+                    <div class="tinyCard mt-3">
+                        <img src="{{ events.cover_image.url }}" class="img-fluid" alt={{events.name}}>
+                        <h5 class="mt-2 text-center">{{events.name}}</h5>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% include 'partials/_footer.html' %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% include 'partials/_navbar.html' %}
+<section class="timeout">
+    <div class="accounts">
+        <div class="container logout">
+            <p>Due to high demand, your chosen tickets can only be held for a limited time and then removed automatically.</p>
+            <hr>
+            <a href="/" class="btn btn-primary btn-sm">Back to Home Page</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

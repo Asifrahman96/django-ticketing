@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% include 'partials/_alerts.html' %}
+{% include 'partials/_navbar.html' %}
+<section class="show">
+    <form>
+        <input name="apiLink" type="hidden" id="apiLink" value="http://127.0.0.1:8000/api/?show={{show.id}}" />
+    </form>
+    <header class="showHeader">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                    <img src={{show.event.cover_image.url}} class="showImg" alt={{show.event}}>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-4 showDetails">
+                    <h6>{{ show.event }}</h6>
+                    <p>{{ show.date | date:"d M Y" }} , {{ show.time | time:"H:i"}}</p>
+                    <p>{{ show.event.location }}</p>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-6 showDates">
+                    <p> Dates :</p>
+                    {% for dates in dates %}
+                    <a href="{% url 'events:show' dates.id %}">
+                        <span class="{% if dates.date == show.date %}
+                                showButton__active {% else %} showButton {% endif%}
+                        ">{{ dates.date | date:"d M"  }} , {{dates.time | time:"H:i"}}</span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="wrapper">
+        <div class="main">
+            <div id="seats-container">
+                <svg id="seats">
+                </svg>
+            </div>
+        </div>
+        <div class="sidebar">
+            <div id="alerts">
+                <div class='alert alert-blue text-center alert-sm small m-0'>
+                    No Seats Selected Yet.
+                </div>
+            </div>
+            <div class="Purchase">
+                <table id="tickets" class="table">
+                </table>
+            </div>
+            <hr>
+            <div id="totalAmount">
+            </div>
+            <div class="purchaseButton">
+                <form id="newPurchaseForm" method="POST">
+                    {% csrf_token %}
+                    <input name="seatId" type="hidden" id="seatId" value="" />
+                    <input name="seatName" type="hidden" id="seatName" value="" />
+                    <input name="ticketTotal" type="hidden" id="ticketTotal" value="" />
+                    <button id="btnPurchase" class="btn btn-success btn-block" disabled>Checkout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+    body {
+        overflow: hidden;
+    }
+</style>
+<script src="{% static 'js/d3.min.js' %}"></script>
+<script src="{% static 'js/seat.js' %}"></script>
+{% endblock %}

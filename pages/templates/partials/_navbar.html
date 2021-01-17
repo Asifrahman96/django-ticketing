@@ -1,0 +1,58 @@
+{% load static %}
+<nav class="navbar navbar-expand-md">
+    <div class="container">
+        <a class="navbar-brand" href="/">PlanetX</a>
+        <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false"
+            aria-labinrel="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'events:events' %}">Events</a>
+                </li>
+                                                                           <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>                                                                      
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+            </ul>
+    
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ user.first_name }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'profile'%}"><i class="fas fa-user"></i> Profile</a>
+                        <a class="dropdown-item"
+                            href="javascript:{document.getElementById('logout').submit()}"><i class="fas fa-sign-in-alt"></i> Logout</a>
+                        <form action="{% url 'logout' %}" method="POST" id="logout">
+                            {% csrf_token %}
+                            <input  type="hidden">
+                        </form>
+                    </div>
+                </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a href="{% url 'register'%}" class="nav-link auth">
+                            Register
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'login'%}" class="nav-link">
+                            Login
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

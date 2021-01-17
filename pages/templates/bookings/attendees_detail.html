@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% include 'partials/_navbar.html' %}
+{% include 'partials/_datatables.html' %}
+<section class="attendees">
+    <header class="eventsHeader">
+        <div class="container">
+            <h4>{{ show.event.name }} - Event Attendees</h4>
+        </div>
+    </header>
+    <div class="container mt-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'bookings:bookings_events' %}">Event Dashboard</a></li>
+                <li class="breadcrumb-item"><a
+                        href="{% url 'bookings:bookings_dashboard' slug=show.event.slug %}">{{ show.event.name }}</a>
+                </li>
+                <li class="breadcrumb-item"><a href="{% url 'bookings:attendees' slug=show.event.slug %}">Event
+                        Attendees</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ show.date }}, {{ show.time }}</li>
+            </ol>
+        </nav>
+        <div class="attendeesFilter col-md-6">
+            <div class="form-group">
+                <label>Attendees For:</label>
+                <div class="dropdown show">
+                    <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ show.date }}, {{ show.time }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'bookings:attendees' slug=show.event.slug %}">All
+                            Shows</a>
+                        {% for dates in dates %}
+                            {% if dates.date != show.date %}
+                                <a class="dropdown-item" href="{% url 'bookings:attendees_detail' dates.id %}">{{ dates.date }},
+                                    {{ dates.time }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div> 
+        </div>
+        <hr>
+        <div class="heading text-center">
+            <h5>{{ show.event.name }} - {{ show.date}},{{ show.time }}</h5>
+        </div>
+        <div class="attendeesTable">
+            <table id="attendeesTable" class="table table-primary text-center mt-5">
+                <thead>
+                    <tr>
+                        <th scope="col">Booking Id</th>
+                        <th scope="col">Customer Name</th>
+                        <th scope="col">Booked Date</th>
+                        <th scope="col">Booked Seats</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col">Amount Paid</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for attendees in attendees %}
+                        <tr>
+                            <td>{{ attendees.booking_id }}</td>
+                            <td>{{ attendees.c_name }}</td>
+                            <td>{{ attendees.booked_date | date }}</td>
+                            <td>{{ attendees.booked_seats_name }}</td>
+                            <td>{{ attendees.c_phone }}</td>
+                            <td>
+                                {{ attendees.booked_price }}
+                                <small class="text-muted">KWD</small>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% include 'partials/_footer.html' %}
+{% endblock %}

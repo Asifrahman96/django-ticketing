@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load humanize %}
+{% load static %}
+<div class="accounts">
+    <div class="container">
+        {% include 'partials/_alerts.html' %}
+        <div class="col-lg-8 col-md-12 col-sm-12 offset-lg-2 auth-container">
+            <h3 class="heading-primary text-center">Register</h3>
+            <hr>
+            <form action="{% url 'register' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group mt-3">
+                            <label for="first_name">First name</label>
+                            <input name="first_name" class="form-control" placeholder="Please enter your first name" required
+                                autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mt-3">
+                            <label for="last_name">Last name</label>
+                            <input name="last_name" class="form-control" placeholder="Please enter your last name" required
+                                autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="username">username</label>
+                    <input name="username" class="form-control" placeholder="Please enter your username" required autocomplete="off">
+                </div>
+                <div class="form-group mt-3">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" class="form-control" placeholder="Please enter your email" required autocomplete="off">
+                </div>
+                <div class="form-group mt-3">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="Please enter your password" required
+                        autocomplete="off">
+                </div>
+                <div class="form-group mt-3">
+                    <label for="password2">Confirm Password</label>
+                    <input type="password" name="password2" class="form-control" placeholder="Please enter your confirm password" required
+                        autocomplete="off">
+                </div>
+                <div class="form-group mt-3">
+                    <button class="btn btn-primary btn-block" type="submit">Submit</button>
+                </div>
+                <div class="form-group mt-3 text-center">
+                    <a href="{% url 'login' %}" class="primary-color">Have an account already ? Please login here</a>
+                </div>
+                <div class="form-group mt-3 text-center">
+                    <a href="{% url 'home' %}" class="primary-color">Back to home page</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% include 'partials/_navbar.html' %}
+<section class="timeout">
+    <div class="accounts">
+        <div class="container logout">
+            <p>Sorry, There are no tickets in your basket. Either your shopping basket has expired, or you have not added any tickets.</p>
+            <hr>
+            <a href="/" class="btn btn-primary btn-sm">Back to Home Page</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
